@@ -5,15 +5,15 @@ category: advanced
 
 # Loader 使用文档
 
-## Loader 是什么
+## Loader 简介
 
-是由 PingCAP 开发的数据导入工具，可以用于向 TiDB 中导入数据。
+Loader 是由 PingCAP 开发的数据导入工具，用于向 TiDB 中导入数据。
 
 [Binary 下载](http://download.pingcap.org/tidb-enterprise-tools-latest-linux-amd64.tar.gz)
 
-## 为什么我们要做这个东西
+## 为什么我们要做这个工具
 
-当数据量比较大的时候，如果用 mysqldump 这样的工具迁移数据会比较慢。我们尝试了 Percona 的 mydumper/myloader 套件，能够多线程导出和导入数据。在使用过程中，mydumper 问题不大，但是 myloader 由于缺乏出错重试、断点续传这样的功能，使用起来很不方便。所以我们开发了 loader，能够读取 mydumper 的输出数据文件，通过 mysql protocol 向 TiDB/MySQL 中导入数据。
+当数据量比较大的时候，如果用 mysqldump 这样的工具迁移数据会比较慢。我们尝试了 [mydumper/myloader 套件](https://github.com/maxbube/mydumper)，能够多线程导出和导入数据。在使用过程中，mydumper 问题不大，但是 myloader 由于缺乏出错重试、断点续传这样的功能，使用起来很不方便。所以我们开发了 loader，能够读取 mydumper 的输出数据文件，通过 MySQL protocol 向 TiDB/MySQL 中导入数据。
 
 ## Loader 有哪些优点
 
@@ -130,18 +130,20 @@ port = 4000
 
 #### 合库合表场景案例说明
   
- 根据配置文件的 route-rules 可以支持将分库分表的数据导入到同一个库同一个表中，但是在开始前需要检查分库分表规则
- +   是否可以利用 route-rules 的语义规则表示
- +   分表中是否包含唯一递增主键，或者合并后数据上有冲突的唯一索引或者主键
- 
- loader 需要配置文件中开启 route-rules 参数以提供合库合表功能
- +   如果使用该功能，pattern-schema 与 target-schema 必须填写
- +   如果 pattern-table 与 target-table 为空，将不进行表名称合并或转换
- 
+根据配置文件的 route-rules 可以支持将分库分表的数据导入到同一个库同一个表中，但是在开始前需要检查分库分表规则：
+
++ 是否可以利用 route-rules 的语义规则表示
++ 分表中是否包含唯一递增主键，或者合并后是否包含数据上有冲突的唯一索引或者主键
+
+Loader 需要配置文件中开启 route-rules 参数以提供合库合表功能
+
++ 如果使用该功能，必须填写 `pattern-schema` 与 `target-schema` 
++ 如果 `pattern-table` 与 `target-table` 为空，将不进行表名称合并或转换
+
 ```
 [[route-rules]]
 pattern-schema = "example_db"
 pattern-table = "table_*"
 target-schema = "example_db"
 target-table = "table"
-```   
+```

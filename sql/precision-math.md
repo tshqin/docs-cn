@@ -1,5 +1,5 @@
 ---
-title: TiDB 用户文档
+title: 精度数学
 category: user guide
 ---
 
@@ -53,7 +53,7 @@ DECIMAL 列不存储前导的字符 `+` 或字符 `-` 或数字 `0`. 如果将 +
 
 DECIMAL 列不允许插入大于列定义的隐含范围的值. 例如, DECIMAL(3, 0) 列范围为 -999 到 999. DECIMAL(M, D) 列小数点左边部分最多支持 M-D 位数字.
 
-有关 DECIMAL 值的内部格式完整说明, 请参阅 TiDB 源码文件 [util/types/mydecimal.go](https://github.com/pingcap/tidb/blob/master/util/types/mydecimal.go).
+有关 DECIMAL 值的内部格式完整说明, 请参阅 TiDB 源码文件 [types/mydecimal.go](https://github.com/pingcap/tidb/blob/master/types/mydecimal.go).
 
 ## 表达式计算
 
@@ -70,7 +70,7 @@ DECIMAL 列不允许插入大于列定义的隐含范围的值. 例如, DECIMAL(
 向一个数值类型列插入数据的具体行为会受到 SQL 模式的影响。接下来的讨论将围绕严格模式以及 `ERROR_FOR_DIVISION_BY_ZERO` 模式展开，如果要打开所有的限制，可以简单的使用 `TRADITIONAL` 模式，这个模式将同时使用严格模式以及 `ERROR_FOR_DIVISION_BY_ZERO`  模式：
 
 ```sql
-SET sql_mode = 'TRADITIONAL`;
+SET sql_mode = 'TRADITIONAL';
 ```
 
 向一个具有精确值类型（`DECIMAL` 或者整数类型）的列插入数据时，如果插入的数据位于该列的值域范围内将使用该数据的精确值。如果该数据的小数部分太长，将会发生数值修约，这时会有 warning 产生，具体内容可以看"数值修约"。

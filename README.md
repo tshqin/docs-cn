@@ -1,11 +1,14 @@
-# TiDB 中文技术文档
+﻿# TiDB 中文技术文档
 
 ## 目录
 
-+ TiDB 简介与整体架构
-  - [TiDB 简介](overview.md#tidb-简介)
-  - [TiDB 整体架构](overview.md#tidb-整体架构)
-- [TiDB 快速入门指南](QUICKSTART.md)
++ 关于 TiDB
+  - [TiDB 简介](overview.md)
+  - [TiDB 整体架构](architecture.md)
+  - [TiDB 核心特性](features.md)
++ TiDB 快速入门
+  - [快速入门指南](QUICKSTART.md)
+  - [SQL 基本操作](try-tidb.md)
 + TiDB 用户文档
   + TiDB 数据库管理
     - [TiDB 服务](sql/tidb-server.md)
@@ -18,7 +21,8 @@
     - [TiDB 访问权限管理](sql/privilege.md)
     - [TiDB 用户账户管理](sql/user-account-management.md)
     - [使用加密连接](sql/encrypted-connections.md)
-  + SQL 优化
+  + TiDB SQL 优化和执行
+    - [SQL 优化流程简介](sql/sql-optimizer-overview.md)
     - [理解 TiDB 执行计划](sql/understanding-the-query-execution-plan.md)
     - [统计信息](sql/statistics.md)
   + 语言结构
@@ -69,18 +73,23 @@
   - [TiDB 事务隔离级别](sql/transaction-isolation.md)
   - [错误码与故障诊断](sql/error.md)
   - [与 MySQL 兼容性对比](sql/mysql-compatibility.md)
+  - [TiDB 内存控制](sql/tidb-memory-control.md)
+  - [慢查询日志](sql/slow-query.md)
   + 高级功能
     - [历史数据回溯](op-guide/history-read.md)
+    - [垃圾回收 (GC)](op-guide/gc.md)
 + TiDB 运维文档
   - [软硬件环境需求](op-guide/recommendation.md)
-  + 部署集群 
+  + 部署集群
     - [Ansible 部署方案（强烈推荐）](op-guide/ansible-deployment.md)
-    - [离线 Ansible 部署方案（强烈推荐）](op-guide/offline-ansible-deployment.md)
+    - [离线 Ansible 部署方案](op-guide/offline-ansible-deployment.md)
     - [Docker 部署方案](op-guide/docker-deployment.md)
     - [Docker Compose 部署方案](op-guide/docker-compose.md)
     - [跨机房部署方案](op-guide/location-awareness.md)
   + 配置集群
     - [参数解释](op-guide/configuration.md)
+    - [TiDB 配置项解释](op-guide/tidb-config-file.md)
+    - [使用 Ansible 变更组件配置](op-guide/ansible-deployment-rolling-update.md#变更组件配置)
     - [开启 TLS 验证](op-guide/security.md)
     - [生成自签名证书](op-guide/generate-self-signed-certificates.md)
   + 监控集群
@@ -88,9 +97,11 @@
     - [重要监控指标详解](op-guide/dashboard-overview-info.md)
     - [组件状态 API & 监控](op-guide/monitor.md)
   + 扩容缩容
-     - [使用 Ansible 扩容缩容](QUICKSTART.md#tidb-集群扩容缩容方案)
-     - [集群扩容缩容方案](op-guide/horizontal-scale.md)
-  - [升级](op-guide/ansible-deployment.md#滚动升级)
+    - [集群扩容缩容方案](op-guide/horizontal-scale.md)
+    - [使用 Ansible 扩容缩容](op-guide/ansible-deployment-scale.md)
+  + 升级
+    - [升级组件版本](op-guide/ansible-deployment-rolling-update.md#升级组件版本)
+    - [TiDB 2.0 升级操作指南](op-guide/tidb-v2-upgrade-guide.md)
   - [性能调优](op-guide/tune-tikv.md)
   + 备份与迁移
     - [备份与恢复](op-guide/backup-restore.md)
@@ -98,31 +109,78 @@
       - [数据迁移概述](op-guide/migration-overview.md)
       - [全量导入](op-guide/migration.md#使用-mydumperloader-全量导入数据)
       - [增量导入](op-guide/migration.md#使用-syncer-增量导入数据)
-  - [Binary 部署方案](op-guide/binary-deployment.md)
   - [故障诊断](trouble-shooting.md)
 + TiDB 周边工具
-  - [Syncer 使用文档](tools/syncer.md)
-  - [Loader 使用文档](tools/loader.md)
-  - [TiDB-Binlog 使用文档](tools/tidb-binlog-kafka.md)
-  - [PD Control 使用文档](tools/pd-control.md)
+  - [Syncer](tools/syncer.md)
+  - [Loader](tools/loader.md)
+  - [TiDB-Binlog](tools/tidb-binlog-kafka.md)
+  - [PD Control](tools/pd-control.md)
+  - [PD Recover](tools/pd-recover.md)
+  - [TiKV Control](tools/tikv-control.md)
+  - [TiDB Controller](tools/tidb-controller.md)
 + TiSpark 文档
   - [TiSpark 快速入门指南](tispark/tispark-quick-start-guide.md)
   - [TiSpark 用户指南](tispark/tispark-user-guide.md)
 - [常见问题与解答(FAQ)](FAQ.md)
 - [最佳实践](https://pingcap.com/blog-cn/tidb-best-practice/)
-- [版本发布历史](releases/README.md)
-- [TiDB 路线图](https://github.com/pingcap/docs-cn/blob/master/ROADMAP.md)
++ [版本发布历史](releases/rn.md)
+  - [2.1 RC3](releases/21rc3.md)
+  - [2.1 RC2](releases/21rc2.md)
+  - [2.0.7](releases/207.md)
+  - [2.1 RC1](releases/21rc1.md)
+  - [2.0.6](releases/206.md)
+  - [2.0.5](releases/205.md)
+  - [2.1 Beta](releases/21beta.md)
+  - [2.0.4](releases/204.md)
+  - [2.0.3](releases/203.md)
+  - [2.0.2](releases/202.md)
+  - [2.0.1](releases/201.md)
+  - [2.0](releases/2.0ga.md)
+  - [2.0 RC5](releases/2rc5.md)
+  - [2.0 RC4](releases/2rc4.md)
+  - [2.0 RC3](releases/2rc3.md)
+  - [2.0 RC1](releases/2rc1.md)
+  - [1.1 Beta](releases/11beta.md)
+  - [1.1 Alpha](releases/11alpha.md)
+  - [1.0](releases/ga.md)
+  - [Pre-GA](releases/prega.md)
+  - [RC4](releases/rc4.md)
+  - [RC3](releases/rc3.md)
+  - [RC2](releases/rc2.md)
+  - [RC1](releases/rc1.md)
+- [TiDB 路线图](ROADMAP.md)
 + 用户案例
+  - [北京银行](http://t.cn/RnY8fGn)
+  - [海航](http://t.cn/REXx0Qe)
+  - [今日头条](http://t.cn/RnLfEMf)
+  - [转转](http://t.cn/R1MAXEq)
   - [Mobike](http://t.cn/RT8FbP6)
+  - [饿了么（一）](http://t.cn/RucuK6m)
+  - [饿了么（二）](http://t.cn/RnsqFT6)
+  - [爱奇艺](http://t.cn/EvErsc1)
   - [易果生鲜](http://t.cn/RTYVhzH)
-  - [360金融](http://t.cn/RTKnTev)
-  - [猿辅导](http://t.cn/RTKnKSX)
+  - [同程旅游](http://t.cn/RmXeNKR)
   - [去哪儿](http://t.cn/RTKnsL7)
-  - [盖娅互娱](http://t.cn/RT9r7hx)
+  - [G7](http://t.cn/RQVePoX)
   - [一面数据](http://t.cn/RT9r5di)
-  - [万达网络](http://t.cn/RTKm6ds)
-  - [某电信运营商](http://t.cn/RTYWADg)
   - [凤凰网](http://t.cn/RHRQfNT)
+  - [猿辅导](http://t.cn/RTKnKSX)
+  - [Mobikok](http://t.cn/Rm1F6lg)
+  - [二维火](http://t.cn/R8bXM2f)
+  - [客如云](http://t.cn/R1wSEJH)
+  - [Ping++](http://t.cn/RE5xYKn)
+  - [乐视云](http://t.cn/Rnv3IVs)
+  - [零氪科技](http://t.cn/REj7tSv)
+  - [威锐达测控](http://t.cn/R3CrviR)
+  - [盖娅互娱](http://t.cn/RT9r7hx)
+  - [游族网络](http://t.cn/R8k4AWB)
+  - [西山居](http://t.cn/RBP12zj)
+  - [FUNYOURS JAPAN](http://t.cn/Rnoab5D)
+  - [特来电](http://t.cn/RrHzUGW)
+  - [万达网络](http://t.cn/RTKm6ds)
+  - [360金融](http://t.cn/RTKnTev)
+  - [中国电信翼支付](http://t.cn/R3Wd9p3)
+  - [某电信运营商](http://t.cn/RTYWADg)
 + 更多资源
   - [常用工具](https://github.com/pingcap/tidb-tools)
   - [PingCAP 团队技术博客](https://pingcap.com/blog-cn/)
@@ -130,21 +188,37 @@
   - [Weekly](https://pingcap.com/weekly/)
   - [英文文档](https://pingcap.com/docs)
 
-
-
 ## TiDB 简介
 
-TiDB 是 PingCAP 公司基于 Google [Spanner](http://research.google.com/archive/spanner.html) / [F1](http://research.google.com/pubs/pub41344.html) 论文实现的开源分布式 NewSQL 数据库。
+TiDB 是 PingCAP 公司受 Google [Spanner](http://research.google.com/archive/spanner.html) / [F1](http://research.google.com/pubs/pub41344.html) 论文启发而设计的开源分布式 HTAP (Hybrid Transactional and Analytical Processing) 数据库，结合了传统的 RDBMS 和 NoSQL 的最佳特性。TiDB 兼容 MySQL，支持无限的水平扩展，具备强一致性和高可用性。TiDB 的目标是为 OLTP (Online Transactional Processing) 和 OLAP (Online Analytical Processing) 场景提供一站式的解决方案。
 
-TiDB 具备如下 NewSQL 核心特性：
+TiDB 具备如下核心特性：
 
-* SQL支持 （TiDB 是 MySQL 兼容的）
-* 水平线性弹性扩展
-* 分布式事务
-* 跨数据中心数据强一致性保证
-* 故障自恢复的高可用
+- 高度兼容 MySQL
 
-TiDB 的设计目标是 100% 的 OLTP 场景和 80% 的 OLAP 场景。
+    大多数情况下，无需修改代码即可从 MySQL 轻松迁移至 TiDB，分库分表后的 MySQL 集群亦可通过 TiDB 工具进行实时迁移。
+
+- 水平弹性扩展
+
+    通过简单地增加新节点即可实现 TiDB 的水平扩展，按需扩展吞吐或存储，轻松应对高并发、海量数据场景。
+
+- 分布式事务
+
+    TiDB 100% 支持标准的 ACID 事务。
+
+- 真正金融级高可用
+
+    相比于传统主从 (M-S) 复制方案，基于 Raft 的多数派选举协议可以提供金融级的 100% 数据强一致性保证，且在不丢失大多数副本的前提下，可以实现故障的自动恢复 (auto-failover)，无需人工介入。
+
+- 一站式 HTAP 解决方案
+
+    TiDB 作为典型的 OLTP 行存数据库，同时兼具强大的 OLAP 性能，配合 TiSpark，可提供一站式 HTAP 解决方案，一份存储同时处理 OLTP & OLAP，无需传统繁琐的 ETL 过程。
+
+- 云原生 SQL 数据库
+
+    TiDB 是为云而设计的数据库，同 Kubernetes 深度耦合，支持公有云、私有云和混合云，使部署、配置和维护变得十分简单。
+
+TiDB 的设计目标是 100% 的 OLTP 场景和 80% 的 OLAP 场景，更复杂的 OLAP 分析可以通过 [TiSpark 项目](https://github.com/pingcap/docs-cn/blob/master/tispark/tispark-user-guide.md)来完成。
 
 TiDB 对业务没有任何侵入性，能优雅的替换传统的数据库中间件、数据库分库分表等 Sharding 方案。同时它也让开发运维人员不用关注数据库 Scale 的细节问题，专注于业务开发，极大的提升研发的生产力。
 
@@ -197,4 +271,4 @@ TiKV Server 负责存储数据，从外部看 TiKV 是一个分布式的提供�
 
 +   TiKV
 
-    TiKV 是一个集群，通过 Raft 协议保持数据的一致性（副本数量可配置，默认保存三副本），并通过 PD 做负载均衡调度。单个节点失效时，会影响这个节点上存储的所有 Region。对于 Region 中的 Leader 节点，会中断服务，等待重新选举；对于 Region 中的 Follower 节点，不会影响服务。当某个 TiKV 节点失效，并且在一段时间内（默认 10 分钟）无法恢复，PD 会将其上的数据迁移到其他的 TiKV 节点上。
+    TiKV 是一个集群，通过 Raft 协议保持数据的一致性（副本数量可配置，默认保存三副本），并通过 PD 做负载均衡调度。单个节点失效时，会影响这个节点上存储的所有 Region。对于 Region 中的 Leader 节点，会中断服务，等待重新选举；对于 Region 中的 Follower 节点，不会影响服务。当某个 TiKV 节点失效，并且在一段时间内（默认 30 分钟）无法恢复，PD 会将其上的数据迁移到其他的 TiKV 节点上。

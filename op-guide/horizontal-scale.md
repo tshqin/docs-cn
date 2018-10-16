@@ -9,7 +9,9 @@ category: deployment
 
 TiDB 集群可以在不影响线上服务的情况下动态进行扩容和缩容。
 
-下面分别介绍如果增加或者删除 PD，TiKV 以及 TiDB 的节点。
+> **注**：如果使用 Ansible 部署 TiDB 集群，请参考[使用 Ansible 扩容缩容](ansible-deployment-scale.md)。
+
+下面分别介绍如何增加或者删除 PD，TiKV 以及 TiDB 的节点。
 
 下面用到的 pd-ctl 文档可以参考 [pd-control](../tools/pd-control.md)。
 
@@ -113,7 +115,7 @@ TiDB 集群可以在不影响线上服务的情况下动态进行扩容和缩容
 迁移过程中可以先把新集群的机器全部添加到已有的集群中，然后再把旧的节点一个一个地下线。
 可以通过查看正在下线的节点的状态信息来确定这个节点是否已经完成下线，确认完成以后再下线下一个节点。
 
-### TiDB
+## TiDB
 
 TiDB 是一个无状态的服务，这也就意味着我们能直接添加和删除 TiDB。
 需要注意的是，如果我们在 TiDB 的服务的前面搭建了一个 proxy（譬如 HAProxy），则需要更新 proxy 的配置并重新载入。

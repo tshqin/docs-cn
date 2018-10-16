@@ -1,6 +1,6 @@
 ---
 title: JSON 函数及 Generated Column
-category: compatibility
+category: user guide
 ---
 
 # JSON 函数及 Generated Column
@@ -9,7 +9,7 @@ category: compatibility
 
 为了在功能上兼容 MySQL 5.7 及以上，同时更好地支持文档类型存储，我们在最新版本的 TiDB 中加入了 JSON 的支持。TiDB 所支持的文档是指以 JSON 为编码类型的键值对的组合。用户可以在 TiDB 的表中使用 JSON 类型的字段，同时以生成列（generated column）的方式为 JSON 文档内部的字段建立索引。基于此，用户可以很灵活地处理那些 schema 不确定的业务，同时不必受限于传统文档数据库糟糕的读性能及匮乏的事务支持。
 
-## JSON功能介绍
+## JSON 功能介绍
 
 TiDB 的 JSON 主要参考了 MySQL 5.7 的用户接口。例如，可以创建一个表，包含一个 JSON 字段来存储那些复杂的信息：
 
@@ -40,7 +40,7 @@ INSERT INTO person (name, address_info) VALUES ("John", CAST(123 AS JSON));
 现在，如果我们想查询表中所有居住在北京的用户，该怎么做呢？需要把数据全拉回来，然后在业务层进行过滤吗？不需要，和 MongoDB 等文档数据库相同，我们有在服务端支持用户各种复杂组合查询条件的能力。你可以这样写 SQL：
 
 ```sql
-SELECT id, name FROM person WHERE JSON_EXTRACT(address_info, '$.city') = 'Beijing');
+SELECT id, name FROM person WHERE JSON_EXTRACT(address_info, '$.city') = 'Beijing';
 ```
 
 TiDB 支持 `JSON_EXTRACT` 函数，该函数与 MySQL 5.7 中 `JSON_EXTRACT` 的用法完全相同。这个函数的意思就是，从 `address_info` 这个文档中取出名为 `city` 这个字段。它的第二个参数是一个“路径表达式”，我们由此可以指定到底要取出哪个字段。关于路径表达式的完整语法描述比较复杂，我们还是通过几个简单的例子来了解其用法：
@@ -65,10 +65,14 @@ SELECT JSON_EXTRACT(@person,  '$.friends[2].name'); -- gets NULL
 * [JSON_REMOVE](https://dev.mysql.com/doc/refman/5.7/en/json-modification-functions.html#function_json-remove)
 * [JSON_TYPE](https://dev.mysql.com/doc/refman/5.7/en/json-attribute-functions.html#function_json-type)
 * [JSON_UNQUOTE](https://dev.mysql.com/doc/refman/5.7/en/json-modification-functions.html#function_json-unquote)
+* [JSON_MERGE](https://dev.mysql.com/doc/refman/5.7/en/json-modification-functions.html#function_json-merge)
+* [JSON_CONTAINS](https://dev.mysql.com/doc/refman/5.7/en/json-search-functions.html#function_json-contains)
+* [JSON_CONTAINS_PATH](https://dev.mysql.com/doc/refman/5.7/en/json-search-functions.html#function_json-contains-path)
+* [JSON_LENGTH](https://dev.mysql.com/doc/refman/5.7/en/json-attribute-functions.html#function_json-length)
 
 直接从名字上，我们便能得出这些函数的大致用途，而且它们的语义也与 MySQL 5.7 完全一致，因此，想要查询它们具体的用法，我们可以直接查阅 MySQL 5.7 的[相关文档](https://dev.mysql.com/doc/refman/5.7/en/json-functions.html)。MySQL 5.7 的用户可以无缝迁移至 TiDB。
 
-熟悉 MySQL 5.7 的用户会发现，TiDB 尚未完全支持所有 MySQL 5.7 中的 JSON 函数。这是因为我们的一期目标是能够提供完备的 **MySQL X Plugin** 支持即可，而这已经涵盖大部分常用的 JSON 增删改查的功能了。如有需要，我们会继续完善对其他函数的支持。
+熟悉 MySQL 5.7 的用户会发现，TiDB 尚未完全支持 MySQL 5.7 中所有的 JSON 函数。通过 [TiDB #7546](https://github.com/pingcap/tidb/issues/7546) 可查看 TiDB 中添加新函数的进度。
 
 ## 使用生成列对 JSON 建索引
 
@@ -92,7 +96,7 @@ CREATE TABLE person (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     address_info JSON,
-    city VARCHAR(64)  AS (JSON_EXTRACT(address_info, '$.city')) VIRTUAL,
+    city VARCHAR(64)  AS (JSON_UNQUOTE(JSON_EXTRACT(address_info, '$.city'))) VIRTUAL,
     KEY (city)
 );
 ```

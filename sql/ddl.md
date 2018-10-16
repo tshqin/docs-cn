@@ -1,5 +1,5 @@
 ---
-title: DDL
+title: 数据定义语言
 category: user guide
 ---
 
@@ -186,11 +186,14 @@ TiDB 的自增 ID (`AUTO_INCREMENT` ID) 只保证自增且唯一，并不保证�
 ```sql
 DROP TABLE [IF EXISTS]
     tbl_name [, tbl_name] ...
+    [RESTRICT | CASCADE]
 ```
 
 可以同时删除多个表，表之间用 `,` 隔开。
 
 当删除不存在的表时且不指定使用 `IF EXISTS` 时会报错。
+
+关键字 RESTRICT 和 CASCADE 没有实际效果。其作用是与其他数据库兼容。
 
 ## TRUNCATE TABLE 语法
 
@@ -285,11 +288,12 @@ table_option:
   | ROW_FORMAT [=] {DEFAULT|DYNAMIC|FIXED|COMPRESSED|REDUNDANT|COMPACT}
   | STATS_PERSISTENT [=] {DEFAULT|0|1}
 ```
-`ALTER TABLE` 用于修改已存在的表的结构，比如：修改表及表属性、新增或删除列、创建或删除索引、修改列及属性等. 以下是几个字段类型的描述:
 
-* `index_col_name`、`index_type` 和 `index_option` 可以参考 [CREATE INDEX 语法](#create-index-语法).
+`ALTER TABLE` 用于修改已存在的表的结构，比如：修改表及表属性、新增或删除列、创建或删除索引、修改列及属性等。以下是几个字段类型的描述：
 
-* `table_option` 目前支持都只是语法上支持。
+* `index_col_name`、`index_type` 和 `index_option` 可以参考 [CREATE INDEX 语法](#create-index-语法)。
+
+* `table_option` 目前支持的修改类型为 `AUTO_INCREMENT` 和 `COMMENT`，其它的只是语法上支持。
 
 下面介绍一下具体操作类型的支持情况。
 
@@ -345,7 +349,9 @@ index_type:
 
 * `index_type` 支持 `BTREE` 和 `HASH` ，但仅有 MySQL 语法上的支持，即索引类型与建表语句中的存储引擎选项无关。举例：在 MySQL 中，使用 Innodb 的表，在 `CREATE INDEX` 时只能使用 `BTREE` 索引，而在 TiDB 中既可以使用 `BTREE` 也可以使用 `HASH` 。
 
-* 不支持 MySQL 的 `algorithm_option` 和 `lock_option` 选项。
+* MySQL 的 `algorithm_option` 和 `lock_option` 选项 TiDB 仅作语法支持。
+
+* TiDB 单表最多支持 512 个列。InnoDB 的限制是 1017。MySQL 的硬限制是 4096。详见 MySQL 文档 [Limits on Table Column Count and Row Size](https://dev.mysql.com/doc/refman/5.7/en/column-count-limit.html)
 
 ## DROP INDEX 语法
 
@@ -354,3 +360,7 @@ DROP INDEX index_name ON tbl_name
 ```
 
 `DROP INDEX` 用于删除表上的一个索引，目前暂不支持删除主键索引。
+
+## ADMIN 语句
+
+`ADMIN` 语句可以查看一些跟 DDL 任务相关的信息，具体可以看[这里](admin.md)。
